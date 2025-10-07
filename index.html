@@ -278,7 +278,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             
             // --- CONFIGURACIÓN ---
-            // AHORA ESTAS IMÁGENES SE CARGAN DINÁMICAMENTE
+            const IMAGENES_PLIEGOS = [
+                'pliego1.jpg', 'pliego2.jpg', 'pliego3.jpg', 'pliego4.jpg', 'pliego5.jpg'
+            ];
             const IMAGEN_PORTADA = 'portada.jpg';
             const IMAGEN_CONTRAPORTADA = 'contraportada.jpg';
             const RUTA_IMAGENES = 'imagenes/';
@@ -296,43 +298,28 @@
             let hojas = [];
             let pliegoActual = 0;
 
-            // --- FUNCIÓN MODIFICADA ---
-            // Ahora acepta la lista de pliegos como un argumento
-            function crearAlbum(imagenesPliegos) {
+            function crearAlbum() {
                 book.innerHTML = '';
                 hojas = [];
                 pliegoActual = 0;
-
-                // Si no hay pliegos, no hacemos nada más que la portada/contraportada
-                if (imagenesPliegos.length === 0) {
-                     const hojaUnica = document.createElement('div');
-                     hojaUnica.classList.add('page');
-                     hojaUnica.innerHTML = `
-                        <div class="page-side front page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_PORTADA}');"></div>
-                        <div class="page-side back page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_CONTRAPORTADA}');"></div>
-                    `;
-                    hojas.push(hojaUnica);
-                    book.appendChild(hojaUnica);
-                    return;
-                }
 
                 const hojaPortada = document.createElement('div');
                 hojaPortada.classList.add('page');
                 hojaPortada.innerHTML = `
                     <div class="page-side front page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_PORTADA}');"></div>
-                    <div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${imagenesPliegos[0]}');"></div>
+                    <div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[0]}');"></div>
                 `;
                 hojas.push(hojaPortada);
 
-                for (let i = 0; i < imagenesPliegos.length; i++) {
+                for (let i = 0; i < IMAGENES_PLIEGOS.length; i++) {
                     const hoja = document.createElement('div');
                     hoja.classList.add('page');
                     
-                    const anverso = `<div class="page-side front page-spread right-side" style="background-image: url('${RUTA_IMAGENES}${imagenesPliegos[i]}');"></div>`;
+                    const anverso = `<div class="page-side front page-spread right-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[i]}');"></div>`;
                     
                     let reverso;
-                    if (i < imagenesPliegos.length - 1) {
-                        reverso = `<div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${imagenesPliegos[i + 1]}');"></div>`;
+                    if (i < IMAGENES_PLIEGOS.length - 1) {
+                        reverso = `<div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[i + 1]}');"></div>`;
                     } else {
                         reverso = `<div class="page-side back page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_CONTRAPORTADA}');"></div>`;
                     }
@@ -386,31 +373,7 @@
                 }
             }
             
-            // --- NUEVA FUNCIÓN PARA INICIAR EL ÁLBUM ---
-            async function inicializarAlbum() {
-                try {
-                    // Llama a nuestro script PHP
-                    const response = await fetch('api/listar_pliegos.php');
-                    if (!response.ok) {
-                        throw new Error('No se pudo cargar la lista de imágenes del servidor.');
-                    }
-                    // Convierte la respuesta a JSON
-                    const imagenesPliegos = await response.json();
-                    
-                    // Llama a la función para crear el álbum con la lista obtenida
-                    crearAlbum(imagenesPliegos);
-
-                } catch (error) {
-                    console.error('Error al inicializar el álbum:', error);
-                    // Opcional: Muestra un mensaje de error al usuario en la página
-                    book.innerHTML = '<p style="color: red; text-align: center;">No se pudieron cargar las imágenes del álbum.</p>';
-                }
-            }
-
-            // Inicia todo el proceso
-            inicializarAlbum();
-
-            // Los listeners no cambian
+            crearAlbum();
             nextBtn.addEventListener('click', pasarPliego);
             prevBtn.addEventListener('click', retrocederPliego);
             zoomBtn.addEventListener('click', toggleZoom);
