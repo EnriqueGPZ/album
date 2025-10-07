@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function () {
     
     // --- CONFIGURACIÓN ---
-    // Ya no necesitamos la lista manual de pliegos.
     const IMAGEN_PORTADA = 'portada.jpg';
     const IMAGEN_CONTRAPORTADA = 'contraportada.jpg';
     const RUTA_IMAGENES = 'imagenes/';
     // --- FIN DE LA CONFIGURACIÓN ---
 
     const body = document.body;
+    const bookContainer = document.getElementById('book-container');
     const book = document.getElementById('book');
     const prevBtn = document.getElementById('prev-page-btn');
     const nextBtn = document.getElementById('next-page-btn');
@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     let pliegoActual = 0;
 
     /**
-     * NUEVA FUNCIÓN AUTOMÁTICA
      * Intenta cargar pliegos secuencialmente (pliego1.jpg, pliego2.jpg, etc.)
      * hasta que uno no se encuentre.
      * @returns {Promise<string[]>} Una lista con los nombres de archivo de los pliegos encontrados.
@@ -34,17 +33,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             const rutaCompleta = RUTA_IMAGENES + nombreArchivo;
             
             try {
-                // Intentamos "pedir" la información de la imagen.
-                // Si la respuesta no es 'ok' (ej. 404 Not Found), lanzará un error.
                 const response = await fetch(rutaCompleta, { method: 'HEAD' });
                 if (response.ok) {
                     pliegosEncontrados.push(nombreArchivo);
                     i++;
                 } else {
-                    continuarBuscando = false; // El archivo no existe, paramos.
+                    continuarBuscando = false;
                 }
             } catch (error) {
-                // Si hay un error de red o similar, también paramos.
                 continuarBuscando = false;
             }
         }
@@ -53,25 +49,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         return pliegosEncontrados;
     }
 
-
     async function crearAlbum() {
-        book.innerHTML = 'Cargando álbum...'; // Mensaje mientras se buscan los pliegos
+        book.innerHTML = '<p style="color: #999; font-weight: 300;">Cargando álbum...</p>';
         
-        // 1. Descubrimos los pliegos automáticamente
         const IMAGENES_PLIEGOS = await descubrirPliegos();
 
-        // Si no se encuentra ningún pliego, mostramos un mensaje y paramos.
         if (IMAGENES_PLIEGOS.length === 0) {
-            book.innerHTML = '<p>No se encontraron pliegos. Asegúrate de que los archivos se llamen pliego1.jpg, pliego2.jpg, etc. y estén en la carpeta /imagenes.</p>';
+            book.innerHTML = '<p style="color: #999; font-weight: 300;">No se encontraron pliegos.<br>Asegúrate de que los archivos se llamen pliego1.jpg, pliego2.jpg, etc. y estén en la carpeta /imagenes.</p>';
+            bookContainer.classList.add('loaded'); // Hacemos visible el mensaje de error
             return;
         }
 
-        // 2. Limpiamos el libro y reseteamos variables
         book.innerHTML = '';
         hojas = [];
         pliegoActual = 0;
 
-        // 3. Creamos las hojas del libro (lógica casi idéntica a la anterior)
         const hojaPortada = document.createElement('div');
         hojaPortada.classList.add('page');
         hojaPortada.innerHTML = `<div class="page-side front page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_PORTADA}');"></div><div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[0]}');"></div>`;
@@ -97,6 +89,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             hoja.style.setProperty('--z-offset', -i * 0.1);
             book.appendChild(hoja);
         }
+
+        // Una vez todo está construido, hacemos visible el contenedor del álbum.
+        bookContainer.classList.add('loaded');
     }
 
     function pasarPliego() {
@@ -123,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     
     // --- EVENT LISTENERS ---
-    crearAlbum(); // Ahora esta función es asíncrona, pero se maneja correctamente.
+    crearAlbum();
     nextBtn.addEventListener('click', pasarPliego);
     prevBtn.addEventListener('click', retrocederPliego);
     zoomBtn.addEventListener('click', toggleZoom);
