@@ -8,260 +8,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* --- RESET BÁSICO Y CONFIGURACIÓN GLOBAL --- */
+        /* --- ESTILOS (SIN CAMBIOS) --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
-            overflow: hidden;
-            transition: background-color 0.5s ease;
-        }
-
-        /* --- ESTILOS DEL CONTENEDOR PRINCIPAL --- */
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-
-        h1 {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #888;
-            margin-bottom: 50px;
-            transition: opacity 0.5s ease;
-            font-size: 1rem; 
-        }
-
-        /* --- ESTILOS DEL ÁLBUM --- */
-        #book-container {
-            width: 980px;
-            height: 350px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 2500px;
-            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
-            transform-style: preserve-3d;
-        }
-        
-        #book { 
-            width: 100%; 
-            height: 100%; 
-            position: relative; 
-            transform-style: preserve-3d;
-        }
-        
-        /* Sombra fija en el centro del libro (MÁS SUTIL) */
-        #book::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            width: 18px; /* Un poco más estrecha */
-            height: 100%;
-            transform: translateX(-50%);
-            /* Color cambiado a un tono sepia muy suave */
-            background: linear-gradient(to right, 
-                transparent, 
-                rgba(85, 75, 70, 0.12) 50%, /* Tono cálido al 12% */
-                transparent
-            );
-            z-index: 999;
-            pointer-events: none;
-        }
-        
-        /* --- PÁGINAS CON GROSOR Y SOMBRA --- */
-        .page { 
-            position: absolute; 
-            width: 50%; 
-            height: 100%; 
-            top: 0; 
-            right: 0; 
-            transform-origin: left center; 
-            transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
-            transform: translateZ(calc(var(--z-offset, 0) * 1px)); 
-        }
-        
-        .page.flipped { 
-            transform: rotateY(-180deg) translateZ(calc(var(--z-offset, 0) * 1px)); 
-        }
-
-        .page::after {
-            content: '';
-            position: absolute;
-            top: 0; 
-            left: 0;
-            width: 100%;
-            height: 100%;
-            box-shadow: 0 8px 15px -5px rgba(0, 0, 0, 0.2);
-            z-index: -1;
-            transition: opacity 0.8s ease;
-        }
-
-        .page.flipped::after {
-            opacity: 0;
-        }
-        
-        .page-side { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            background-size: cover; 
-            background-position: center;
-            background-color: #ddd;
-        }
-        
+        body { font-family: 'Montserrat', sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: #333; overflow: hidden; transition: background-color 0.5s ease; }
+        .container { width: 90%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; position: relative; }
+        h1 { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 100%; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 50px; transition: opacity 0.5s ease; font-size: 1rem; }
+        #book-container { width: 980px; height: 350px; position: relative; display: flex; align-items: center; justify-content: center; perspective: 2500px; transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1); transform-style: preserve-3d; }
+        #book { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; }
+        #book::before { content: ''; position: absolute; left: 50%; top: 0; width: 18px; height: 100%; transform: translateX(-50%); background: linear-gradient(to right, transparent, rgba(85, 75, 70, 0.12) 50%, transparent); z-index: 999; pointer-events: none; }
+        .page { position: absolute; width: 50%; height: 100%; top: 0; right: 0; transform-origin: left center; transform-style: preserve-3d; transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1); transform: translateZ(calc(var(--z-offset, 0) * 1px)); }
+        .page.flipped { transform: rotateY(-180deg) translateZ(calc(var(--z-offset, 0) * 1px)); }
+        .page::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: 0 8px 15px -5px rgba(0, 0, 0, 0.2); z-index: -1; transition: opacity 0.8s ease; }
+        .page.flipped::after { opacity: 0; }
+        .page-side { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; background-size: cover; background-position: center; background-color: #ddd; }
         .front {}
-        
-        .back { 
-            transform: rotateY(180deg); 
-        }
-        
-        .page-cover, .page-spread { 
-            background-size: cover; 
-        }
-        
-        .page-spread { 
-            background-size: 200% 100%; 
-        }
-        
-        .left-side { 
-            background-position: left center; 
-        }
-        
-        .right-side { 
-            background-position: right center; 
-        }
-
-        /* --- BOTONES MINIMALISTAS --- */
-        .nav-button, .zoom-button { 
-            background-color: transparent;
-            border: none; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            box-shadow: none;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        
-        .nav-button:hover, .zoom-button:hover { 
-            background-color: rgba(0, 0, 0, 0.05);
-            transform: scale(1.1); 
-        }
-        
-        .nav-button:focus, .zoom-button:focus { 
-            outline: none; 
-        }
-        
-        .nav-button svg, .zoom-button svg { 
-            fill: #999;
-            width: 32px;
-            height: 32px;
-            transition: fill 0.3s ease;
-        }
-        
-        .nav-button:hover svg, .zoom-button:hover svg {
-            fill: #333;
-        }
-
-        .nav-button { 
-            position: absolute; 
-            top: 50%; 
-            width: 50px; 
-            height: 50px; 
-            z-index: 1000; 
-        }
-        
-        .nav-button:hover { 
-            transform: translateY(-50%) scale(1.1); 
-        }
-        
-        #prev-page-btn { 
-            left: -70px; 
-            transform: translateY(-50%); 
-        }
-        
-        #next-page-btn { 
-            right: -70px; 
-            transform: translateY(-50%); 
-        }
-
-        /* --- POSICIÓN DEL BOTÓN DE ZOOM --- */
-        .zoom-button {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            width: 44px;
-            height: 44px;
-            z-index: 2000;
-        }
-
-        /* --- ESTADO ZOOM ACTIVADO --- */
-        body.album-zoomed {
-            background-color: #e8e8ee;
-        }
-        
-        body.album-zoomed #book-container {
-            transform: scale(1.55);
-        }
-        
-        body.album-zoomed h1, body.album-zoomed .footer-text {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        body.album-zoomed #prev-page-btn {
-            left: -100px;
-        }
-        
-        body.album-zoomed #next-page-btn {
-            right: -100px;
-        }
-
-        /* --- ESTILOS DEL TEXTO INFERIOR --- */
-        .footer-text {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #888;
-            font-size: 0.8rem;
-            font-weight: 300;
-            transition: opacity 0.5s ease;
-        }
+        .back { transform: rotateY(180deg); }
+        .page-cover, .page-spread { background-size: cover; }
+        .page-spread { background-size: 200% 100%; }
+        .left-side { background-position: left center; }
+        .right-side { background-position: right center; }
+        .nav-button, .zoom-button { background-color: transparent; border: none; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: none; transition: background-color 0.3s ease, transform 0.3s ease; }
+        .nav-button:hover, .zoom-button:hover { background-color: rgba(0, 0, 0, 0.05); transform: scale(1.1); }
+        .nav-button:focus, .zoom-button:focus { outline: none; }
+        .nav-button svg, .zoom-button svg { fill: #999; width: 32px; height: 32px; transition: fill 0.3s ease; }
+        .nav-button:hover svg, .zoom-button:hover svg { fill: #333; }
+        .nav-button { position: absolute; top: 50%; width: 50px; height: 50px; z-index: 1000; }
+        .nav-button:hover { transform: translateY(-50%) scale(1.1); }
+        #prev-page-btn { left: -70px; transform: translateY(-50%); }
+        #next-page-btn { right: -70px; transform: translateY(-50%); }
+        .zoom-button { position: fixed; top: 2rem; right: 2rem; width: 44px; height: 44px; z-index: 2000; }
+        body.album-zoomed { background-color: #e8e8ee; }
+        body.album-zoomed #book-container { transform: scale(1.55); }
+        body.album-zoomed h1, body.album-zoomed .footer-text { opacity: 0; pointer-events: none; }
+        body.album-zoomed #prev-page-btn { left: -100px; }
+        body.album-zoomed #next-page-btn { right: -100px; }
+        .footer-text { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); color: #888; font-size: 0.8rem; font-weight: 300; transition: opacity 0.5s ease; }
     </style>
 </head>
 <body>
     <button id="zoom-btn" class="zoom-button">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-2V7h-2V5h5v5h-3z"/></svg>
     </button>
-
     <div class="container">
         <h1>Álbum de Boda</h1>
         <div id="book-container">
-            <div id="book"></div>
+            <div id="book"><p>Cargando álbum...</p></div>
             <button id="prev-page-btn" class="nav-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
             </button>
@@ -270,17 +61,12 @@
             </button>
         </div>
     </div>
-
-    <!-- TEXTO INFERIOR AÑADIDO -->
     <p class="footer-text">Este acabado de album es un ejemplo entre todas las posibilidades disponibles.</p>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             
             // --- CONFIGURACIÓN ---
-            const IMAGENES_PLIEGOS = [
-                'pliego1.jpg', 'pliego2.jpg', 'pliego3.jpg', 'pliego4.jpg', 'pliego5.jpg'
-            ];
             const IMAGEN_PORTADA = 'portada.jpg';
             const IMAGEN_CONTRAPORTADA = 'contraportada.jpg';
             const RUTA_IMAGENES = 'imagenes/';
@@ -298,32 +84,72 @@
             let hojas = [];
             let pliegoActual = 0;
 
-            function crearAlbum() {
+            // --- NUEVA FUNCIÓN AUTOMÁTICA ---
+            /**
+             * Intenta encontrar los pliegos de forma secuencial (`pliego1.jpg`, `pliego2.jpg`, etc.)
+             * y se detiene cuando uno de ellos no se encuentra.
+             */
+            async function descubrirPliegos() {
+                const pliegosEncontrados = [];
+                let i = 1;
+                let seguirBuscando = true;
+
+                while (seguirBuscando) {
+                    const nombreArchivo = `pliego${i}.jpg`;
+                    const url = RUTA_IMAGENES + nombreArchivo;
+                    try {
+                        // Usamos 'HEAD' para solo pedir las cabeceras, es más rápido que 'GET'
+                        const response = await fetch(url, { method: 'HEAD' });
+                        if (response.ok) {
+                            pliegosEncontrados.push(nombreArchivo);
+                            i++;
+                        } else {
+                            seguirBuscando = false; // Detiene el bucle si hay un 404 o similar
+                        }
+                    } catch (error) {
+                        // Detiene si hay un error de red (ej. CORS si se prueba localmente)
+                        console.error("Error de red al buscar pliegos, deteniendo la búsqueda.", error);
+                        seguirBuscando = false;
+                    }
+                }
+                return pliegosEncontrados;
+            }
+
+            function crearAlbum(imagenesPliegos) {
                 book.innerHTML = '';
                 hojas = [];
                 pliegoActual = 0;
+
+                if (imagenesPliegos.length === 0) {
+                     const hojaUnica = document.createElement('div');
+                     hojaUnica.classList.add('page');
+                     hojaUnica.innerHTML = `
+                        <div class="page-side front page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_PORTADA}');"></div>
+                        <div class="page-side back page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_CONTRAPORTADA}');"></div>
+                    `;
+                    hojas.push(hojaUnica);
+                    book.appendChild(hojaUnica);
+                    return;
+                }
 
                 const hojaPortada = document.createElement('div');
                 hojaPortada.classList.add('page');
                 hojaPortada.innerHTML = `
                     <div class="page-side front page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_PORTADA}');"></div>
-                    <div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[0]}');"></div>
+                    <div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${imagenesPliegos[0]}');"></div>
                 `;
                 hojas.push(hojaPortada);
 
-                for (let i = 0; i < IMAGENES_PLIEGOS.length; i++) {
+                for (let i = 0; i < imagenesPliegos.length; i++) {
                     const hoja = document.createElement('div');
                     hoja.classList.add('page');
-                    
-                    const anverso = `<div class="page-side front page-spread right-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[i]}');"></div>`;
-                    
+                    const anverso = `<div class="page-side front page-spread right-side" style="background-image: url('${RUTA_IMAGENES}${imagenesPliegos[i]}');"></div>`;
                     let reverso;
-                    if (i < IMAGENES_PLIEGOS.length - 1) {
-                        reverso = `<div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[i + 1]}');"></div>`;
+                    if (i < imagenesPliegos.length - 1) {
+                        reverso = `<div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${imagenesPliegos[i + 1]}');"></div>`;
                     } else {
                         reverso = `<div class="page-side back page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_CONTRAPORTADA}');"></div>`;
                     }
-                    
                     hoja.innerHTML = anverso + reverso;
                     hojas.push(hoja);
                 }
@@ -331,10 +157,8 @@
                 for (let i = 0; i < hojas.length; i++) {
                     const hoja = hojas[i];
                     hoja.style.zIndex = hojas.length - i;
-                    
                     const zOffset = (hojas.length - i) * 0.4;
                     hoja.style.setProperty('--z-offset', zOffset);
-                    
                     book.appendChild(hoja);
                 }
             }
@@ -344,11 +168,7 @@
                 const hojaQueGira = hojas[pliegoActual];
                 hojaQueGira.style.zIndex = 1000;
                 hojaQueGira.classList.add('flipped');
-                
-                setTimeout(() => {
-                    hojaQueGira.style.zIndex = pliegoActual;
-                }, 1200);
-
+                setTimeout(() => { hojaQueGira.style.zIndex = pliegoActual; }, 1200);
                 pliegoActual++;
             }
 
@@ -358,22 +178,28 @@
                 const hojaQueGira = hojas[pliegoActual];
                 hojaQueGira.style.zIndex = 1000;
                 hojaQueGira.classList.remove('flipped');
-                
-                setTimeout(() => {
-                    hojaQueGira.style.zIndex = hojas.length - pliegoActual;
-                }, 1200);
+                setTimeout(() => { hojaQueGira.style.zIndex = hojas.length - pliegoActual; }, 1200);
             }
             
             function toggleZoom() {
                 body.classList.toggle('album-zoomed');
-                if (body.classList.contains('album-zoomed')) {
-                    zoomBtn.innerHTML = collapseIcon;
-                } else {
-                    zoomBtn.innerHTML = expandIcon;
-                }
+                zoomBtn.innerHTML = body.classList.contains('album-zoomed') ? collapseIcon : expandIcon;
             }
             
-            crearAlbum();
+            async function inicializarAlbum() {
+                try {
+                    const imagenesPliegos = await descubrirPliegos();
+                    console.log(`Se encontraron ${imagenesPliegos.length} pliegos:`, imagenesPliegos);
+                    crearAlbum(imagenesPliegos);
+                } catch (error) {
+                    console.error('Error al inicializar el álbum:', error);
+                    book.innerHTML = '<p style="color: red; text-align: center;">No se pudieron cargar las imágenes del álbum.</p>';
+                }
+            }
+
+            // Inicia todo el proceso
+            inicializarAlbum();
+
             nextBtn.addEventListener('click', pasarPliego);
             prevBtn.addEventListener('click', retrocederPliego);
             zoomBtn.addEventListener('click', toggleZoom);
