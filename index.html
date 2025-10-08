@@ -68,26 +68,23 @@
             transform-style: preserve-3d;
         }
         
-        /* Sombra fija en el centro del libro (MÁS SUTIL) */
         #book::before {
             content: '';
             position: absolute;
             left: 50%;
             top: 0;
-            width: 18px; /* Un poco más estrecha */
+            width: 18px;
             height: 100%;
             transform: translateX(-50%);
-            /* Color cambiado a un tono sepia muy suave */
             background: linear-gradient(to right, 
                 transparent, 
-                rgba(85, 75, 70, 0.12) 50%, /* Tono cálido al 12% */
+                rgba(85, 75, 70, 0.12) 50%,
                 transparent
             );
             z-index: 999;
             pointer-events: none;
         }
         
-        /* --- PÁGINAS CON GROSOR Y SOMBRA --- */
         .page { 
             position: absolute; 
             width: 50%; 
@@ -107,23 +104,18 @@
         .page::after {
             content: '';
             position: absolute;
-            top: 0; 
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             box-shadow: 0 8px 15px -5px rgba(0, 0, 0, 0.2);
             z-index: -1;
             transition: opacity 0.8s ease;
         }
 
-        .page.flipped::after {
-            opacity: 0;
-        }
+        .page.flipped::after { opacity: 0; }
         
         .page-side { 
             position: absolute; 
-            width: 100%; 
-            height: 100%; 
+            width: 100%; height: 100%; 
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             background-size: cover; 
@@ -132,26 +124,11 @@
         }
         
         .front {}
-        
-        .back { 
-            transform: rotateY(180deg); 
-        }
-        
-        .page-cover, .page-spread { 
-            background-size: cover; 
-        }
-        
-        .page-spread { 
-            background-size: 200% 100%; 
-        }
-        
-        .left-side { 
-            background-position: left center; 
-        }
-        
-        .right-side { 
-            background-position: right center; 
-        }
+        .back { transform: rotateY(180deg); }
+        .page-cover, .page-spread { background-size: cover; }
+        .page-spread { background-size: 200% 100%; }
+        .left-side { background-position: left center; }
+        .right-side { background-position: right center; }
 
         /* --- BOTONES MINIMALISTAS --- */
         .nav-button, .zoom-button { 
@@ -171,74 +148,40 @@
             transform: scale(1.1); 
         }
         
-        .nav-button:focus, .zoom-button:focus { 
-            outline: none; 
-        }
+        .nav-button:focus, .zoom-button:focus { outline: none; }
         
         .nav-button svg, .zoom-button svg { 
             fill: #999;
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             transition: fill 0.3s ease;
         }
         
-        .nav-button:hover svg, .zoom-button:hover svg {
-            fill: #333;
-        }
+        .nav-button:hover svg, .zoom-button:hover svg { fill: #333; }
 
         .nav-button { 
             position: absolute; 
             top: 50%; 
-            width: 50px; 
-            height: 50px; 
+            width: 50px; height: 50px; 
             z-index: 1000; 
         }
         
-        .nav-button:hover { 
-            transform: translateY(-50%) scale(1.1); 
-        }
-        
-        #prev-page-btn { 
-            left: -70px; 
-            transform: translateY(-50%); 
-        }
-        
-        #next-page-btn { 
-            right: -70px; 
-            transform: translateY(-50%); 
-        }
+        #prev-page-btn { left: -70px; transform: translateY(-50%); }
+        #next-page-btn { right: -70px; transform: translateY(-50%); }
 
         /* --- POSICIÓN DEL BOTÓN DE ZOOM --- */
         .zoom-button {
             position: fixed;
-            top: 2rem;
-            right: 2rem;
-            width: 44px;
-            height: 44px;
+            top: 2rem; right: 2rem;
+            width: 44px; height: 44px;
             z-index: 2000;
         }
 
         /* --- ESTADO ZOOM ACTIVADO --- */
-        body.album-zoomed {
-            background-color: #e8e8ee;
-        }
-        
-        body.album-zoomed #book-container {
-            transform: scale(1.55);
-        }
-        
-        body.album-zoomed h1, body.album-zoomed .footer-text {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        body.album-zoomed #prev-page-btn {
-            left: -100px;
-        }
-        
-        body.album-zoomed #next-page-btn {
-            right: -100px;
-        }
+        body.album-zoomed { background-color: #e8e8ee; }
+        body.album-zoomed #book-container { transform: scale(1.55); }
+        body.album-zoomed h1, body.album-zoomed .footer-text { opacity: 0; pointer-events: none; }
+        body.album-zoomed #prev-page-btn { left: -100px; }
+        body.album-zoomed #next-page-btn { right: -100px; }
 
         /* --- ESTILOS DEL TEXTO INFERIOR --- */
         .footer-text {
@@ -271,34 +214,45 @@
         </div>
     </div>
 
-    <!-- TEXTO INFERIOR AÑADIDO -->
     <p class="footer-text">Este acabado de album es un ejemplo entre todas las posibilidades disponibles.</p>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             
-            // --- CONFIGURACIÓN ---
-            const IMAGENES_PLIEGOS = [
-                'pliego1.jpg', 'pliego2.jpg', 'pliego3.jpg', 'pliego4.jpg', 'pliego5.jpg'
-            ];
-            const IMAGEN_PORTADA = 'portada.jpg';
-            const IMAGEN_CONTRAPORTADA = 'contraportada.jpg';
-            const RUTA_IMAGENES = 'imagenes/';
-            // --- FIN DE LA CONFIGURACIÓN ---
-
             const body = document.body;
             const book = document.getElementById('book');
             const prevBtn = document.getElementById('prev-page-btn');
             const nextBtn = document.getElementById('next-page-btn');
             const zoomBtn = document.getElementById('zoom-btn');
             
+            if (!body || !book || !prevBtn || !nextBtn || !zoomBtn) {
+                console.error("Error crítico: Uno o más elementos HTML esenciales no se encontraron.");
+                return; // Detiene la ejecución si falta algo básico
+            }
+
             const expandIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-2V7h-2V5h5v5h-3z"/></svg>`;
             const collapseIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`;
 
             let hojas = [];
             let pliegoActual = 0;
 
-            function crearAlbum() {
+            async function inicializarAlbum() {
+                try {
+                    const response = await fetch('config.json');
+                    if (!response.ok) {
+                        throw new Error(`Error al cargar config.json. Estado: ${response.status}`);
+                    }
+                    const config = await response.json();
+                    crearAlbum(config);
+                } catch (error) {
+                    console.error("No se pudo inicializar el álbum:", error);
+                    book.innerHTML = `<p style="color: red; text-align: center;">Error al cargar la configuración del álbum. Revisa la consola para más detalles.</p>`;
+                }
+            }
+
+            function crearAlbum(config) {
+                const { ruta_imagenes, portada, contraportada, pliegos: imagenesPliegos } = config;
+
                 book.innerHTML = '';
                 hojas = [];
                 pliegoActual = 0;
@@ -306,22 +260,22 @@
                 const hojaPortada = document.createElement('div');
                 hojaPortada.classList.add('page');
                 hojaPortada.innerHTML = `
-                    <div class="page-side front page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_PORTADA}');"></div>
-                    <div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[0]}');"></div>
+                    <div class="page-side front page-cover" style="background-image: url('${ruta_imagenes}${portada}');"></div>
+                    <div class="page-side back page-spread left-side" style="background-image: url('${ruta_imagenes}${imagenesPliegos[0]}');"></div>
                 `;
                 hojas.push(hojaPortada);
 
-                for (let i = 0; i < IMAGENES_PLIEGOS.length; i++) {
+                for (let i = 0; i < imagenesPliegos.length; i++) {
                     const hoja = document.createElement('div');
                     hoja.classList.add('page');
                     
-                    const anverso = `<div class="page-side front page-spread right-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[i]}');"></div>`;
+                    const anverso = `<div class="page-side front page-spread right-side" style="background-image: url('${ruta_imagenes}${imagenesPliegos[i]}');"></div>`;
                     
                     let reverso;
-                    if (i < IMAGENES_PLIEGOS.length - 1) {
-                        reverso = `<div class="page-side back page-spread left-side" style="background-image: url('${RUTA_IMAGENES}${IMAGENES_PLIEGOS[i + 1]}');"></div>`;
+                    if (i < imagenesPliegos.length - 1) {
+                        reverso = `<div class="page-side back page-spread left-side" style="background-image: url('${ruta_imagenes}${imagenesPliegos[i + 1]}');"></div>`;
                     } else {
-                        reverso = `<div class="page-side back page-cover" style="background-image: url('${RUTA_IMAGENES}${IMAGEN_CONTRAPORTADA}');"></div>`;
+                        reverso = `<div class="page-side back page-cover" style="background-image: url('${ruta_imagenes}${contraportada}');"></div>`;
                     }
                     
                     hoja.innerHTML = anverso + reverso;
@@ -366,14 +320,10 @@
             
             function toggleZoom() {
                 body.classList.toggle('album-zoomed');
-                if (body.classList.contains('album-zoomed')) {
-                    zoomBtn.innerHTML = collapseIcon;
-                } else {
-                    zoomBtn.innerHTML = expandIcon;
-                }
+                zoomBtn.innerHTML = body.classList.contains('album-zoomed') ? collapseIcon : expandIcon;
             }
             
-            crearAlbum();
+            inicializarAlbum();
             nextBtn.addEventListener('click', pasarPliego);
             prevBtn.addEventListener('click', retrocederPliego);
             zoomBtn.addEventListener('click', toggleZoom);

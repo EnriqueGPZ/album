@@ -1,0 +1,12 @@
+{
+  "ruta_imagenes": "imagenes/",
+  "portada": "portada.jpg",
+  "contraportada": "contraportada.jpg",
+  "pliegos": [
+    "pliego1.jpg",
+    "pliego2.jpg",
+    "pliego3.jpg",
+    "pliego4.jpg",
+    "pliego5.jpg"
+  ]
+}
